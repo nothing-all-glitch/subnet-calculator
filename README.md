@@ -1,17 +1,21 @@
 # Interactive Subnet Calculator
 
-An interactive IPv4 subnetting web app focused on visual bit-level learning and practical VLSM planning.
+An interactive IPv4 subnetting web app focused on visual bit-level learning and subnet sequencing.
 
 ## Features
 
 - 32-bit interactive grid grouped by octets
+- Mode switcher: Subnet Details, Bit Lab
+- Quick preset picker + recent calculation history
 - Dual-layer bit interaction:
   - Value zone toggles bit `0/1`
   - Role zone toggles bit role (`Network` vs `Host`) with contiguous mask enforcement
 - Live CIDR boundary movement with network/host highlighting
 - Real-time subnet details:
-  - Subnet mask, network, broadcast, first/last usable, usable host count
-- VLSM allocator for host lists like `64,45,14,9,2`
+  - Subnet mask, wildcard mask, network, broadcast, first/last usable, usable host count
+- IPv4 context panel: class (A/B/C/D/E), private/public scope, and address category
+- Option to preview the next subnets from the current CIDR
+- Copy tool: subnet summary
 - Dark dashboard theme with animated visual feedback
 
 ## Scripts
@@ -26,8 +30,7 @@ An interactive IPv4 subnetting web app focused on visual bit-level learning and 
 ## Architecture
 
 - `src/utils/ipMath.ts` — pure IPv4/CIDR math helpers
-- `src/utils/subnetEngine.ts` — host parsing and VLSM allocation engine
-- `src/App.vue` — interactive UI (bit grid, live subnet panel, VLSM table)
+- `src/App.vue` — interactive UI (bit grid, live subnet panel, subnet sequence table)
 - `src/types/subnet.ts` — shared domain types
 
 The UI is intentionally thin; all subnet logic is implemented in pure utility functions so behavior is deterministic and testable.

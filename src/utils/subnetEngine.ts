@@ -1,5 +1,11 @@
 import type { VlsmAllocation, VlsmResult } from '../types/subnet'
-import { broadcastOf, networkOf, subnetDetailsFor, usableHostCountForPrefix } from './ipMath'
+import {
+  broadcastOf,
+  networkOf,
+  subnetDetailsFor,
+  usableHostCountForPrefix,
+  wildcardMaskFromPrefix,
+} from './ipMath'
 
 function alignToBlock(start: number, blockSize: number): number {
   const remainder = start % blockSize
@@ -81,6 +87,7 @@ export function allocateVlsm(
       requestedHosts,
       prefix,
       mask: details.mask,
+      wildcardMask: wildcardMaskFromPrefix(prefix),
       blockSize,
       usableHostCount: usableHostCountForPrefix(prefix),
       network: details.network,

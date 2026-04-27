@@ -19,6 +19,7 @@ export interface VlsmAllocation {
   requestedHosts: number
   prefix: number
   mask: number
+  wildcardMask: number
   blockSize: number
   usableHostCount: number
   network: number
@@ -30,4 +31,10 @@ export interface VlsmAllocation {
 export interface VlsmResult {
   rows: VlsmAllocation[]
   error?: string
+}
+
+export interface NetworkClassification {
+  addressClass: 'A' | 'B' | 'C' | 'D' | 'E'
+  scope: 'Private' | 'Public'
+  category: 'Unicast' | 'Loopback' | 'Link-local' | 'Multicast' | 'Reserved'
 }

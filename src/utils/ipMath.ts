@@ -1,4 +1,4 @@
-import type { BitValue, SubnetDetails } from '../types/subnet'
+import type { BitValue, NetworkClassification, SubnetDetails } from '../types/subnet'
 
 const MAX_UINT32 = 0xffffffff
 
@@ -67,6 +67,10 @@ export function prefixToMask(prefix: number): number {
   return (MAX_UINT32 << (32 - prefix)) >>> 0
 }
 
+export function wildcardMaskFromPrefix(prefix: number): number {
+  return (~prefixToMask(prefix)) >>> 0
+}
+
 export function networkOf(ip: number, prefix: number): number {
   const mask = prefixToMask(prefix)
   return (ip & mask) >>> 0
@@ -105,5 +109,39 @@ export function subnetDetailsFor(ip: number, prefix: number): SubnetDetails {
     firstUsable,
     lastUsable,
     usableHostCount: usableHostCountForPrefix(prefix),
+  }
+}
+
+export function classifyIPv4(ip: number): NetworkClassification {
+  const firstOctet = (ip >>> 24) & 255
+  const secondOctet = (ip >>> 16) & 255
+
+  const addressClass: NetworkClassification['addressClass'] =
+    firstOctet <= 127 ? 'A' : firstOctet <= 191 ? 'B' : firstOctet <= 223 ? 'C' : firstOctet <= 239 ? 'D' : 'E'
+
+  const isPrivate =
+    firstOctet === 10 ||
+    (firstOctet === 172 && secondOctet >= 16 && secondOctet <= 31) ||
+    (firstOctet === 192 && secondOctet === 168)
+
+  const isLoopback = firstOctet === 127
+  const isLinkLocal = firstOctet === 169 && secondOctet === 254
+  const isMulticast = firstOctet >= 224 && firstOctet <= 239
+  const isReserved = firstOctet >= 240 || firstOctet === 0
+
+  const category: NetworkClassification['category'] = isLoopback
+    ? 'Loopback'
+    : isLinkLocal
+      ? 'Link-local'
+      : isMulticast
+        ? 'Multicast'
+        : isReserved
+          ? 'Reserved'
+          : 'Unicast'
+
+  return {
+    addressClass,
+    scope: isPrivate ? 'Private' : 'Public',
+    category,
   }
 }

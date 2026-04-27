@@ -10,6 +10,10 @@ describe('requiredPrefixForHosts', () => {
     expect(requiredPrefixForHosts(9)).toBe(28)
     expect(requiredPrefixForHosts(2)).toBe(30)
   })
+
+  it('supports /31 for point-to-point when policy is enabled', () => {
+    expect(requiredPrefixForHosts(2, { prefer31PointToPoint: true })).toBe(31)
+  })
 })
 
 describe('allocateVlsm', () => {
@@ -26,6 +30,7 @@ describe('allocateVlsm', () => {
       '192.168.5.208/28',
       '192.168.5.224/30',
     ])
+    expect(intToIPv4(result.rows[0].wildcardMask)).toBe('0.0.0.127')
   })
 
   it('returns an explicit overflow error when address space is not enough', () => {
