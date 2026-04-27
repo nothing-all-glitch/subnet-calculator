@@ -210,6 +210,7 @@ setPreset()
             <tr>
               <th>Requested Hosts</th>
               <th>Subnet</th>
+              <th>Network Mask</th>
               <th>Network</th>
               <th>First Host</th>
               <th>Last Host</th>
@@ -221,6 +222,7 @@ setPreset()
             <tr v-for="(row, index) in vlsm.rows" :key="`${row.network}-${index}`">
               <td>{{ row.requestedHosts }}</td>
               <td>/{{ row.prefix }}</td>
+              <td>{{ intToIPv4(row.mask) }}</td>
               <td>{{ intToIPv4(row.network) }}</td>
               <td>{{ intToIPv4(row.firstUsable) }}</td>
               <td>{{ intToIPv4(row.lastUsable) }}</td>

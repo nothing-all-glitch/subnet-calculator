@@ -80,6 +80,7 @@ export function allocateVlsm(
     rows.push({
       requestedHosts,
       prefix,
+      mask: details.mask,
       blockSize,
       usableHostCount: usableHostCountForPrefix(prefix),
       network: details.network,

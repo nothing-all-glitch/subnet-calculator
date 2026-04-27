@@ -18,6 +18,7 @@ export interface VlsmRequest {
 export interface VlsmAllocation {
   requestedHosts: number
   prefix: number
+  mask: number
   blockSize: number
   usableHostCount: number
   network: number
